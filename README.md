@@ -3,7 +3,7 @@
 Sistema automatizado de clasificación y monitoreo de objetos mediante ESP32 y MicroPython.
 
 ## Descripción del Proyecto
-**Smart-Sort** es una miniestación automatizada diseñada como prototipo académico para la asignatura de Programación II[span_1](start_span)[span_1](end_span)[span_2](start_span)[span_2](end_span). El sistema se encarga de desplazar objetos a través de una banda transportadora, detectar su presencia mediante un sensor infrarrojo, identificar su color (rojo, verde o azul) utilizando un sensor TCS230 y direccionarlos al compartimiento correspondiente[span_3](start_span)[span_3](end_span)[span_4](start_span)[span_4](end_span)[span_5](start_span)[span_5](end_span).
+**Smart-Sort** es una miniestación automatizada diseñada como prototipo académico para la asignatura de Programación II. El sistema se encarga de desplazar objetos a través de una banda transportadora, detectar su presencia mediante un sensor infrarrojo, identificar su color (rojo, verde o azul) utilizando un sensor TCS230 y direccionarlos al compartimiento correspondiente.
 
 ## Componentes Utilizados
 * **Microcontrolador ESP32:** Núcleo de procesamiento y control general del sistema.
