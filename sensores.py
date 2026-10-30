@@ -8,7 +8,7 @@ class GestorSensores:
         self.sensor_ir = Pin(Pin_IR, Pin.IN)
 
         # Sensor de color
-        self.sensor_s0 = Pin(Pin_S0, Pin.OUT)
+        self.sensor_s0 = Pin(Pin_S0, Pin.IN)
         self.sensor_s1 = Pin(Pin_S1, Pin.OUT)
         self.sensor_s2 = Pin(Pin_S2, Pin.OUT)
         self.sensor_s3 = Pin(Pin_S3, Pin.OUT)
@@ -51,7 +51,7 @@ class GestorSensores:
 
     def leer_color (self):
         v = self.leer_color_tcs230()
-        r,g,b= v["R"], v["G"], v ["B"]
+        r,g,b= v["R"], v["G"], v["B"]
         m = max (r, g, b)
         if m < 5:
             return "no_reconocido"
@@ -62,7 +62,5 @@ class GestorSensores:
         if b == m and b > r * 1.2 and b>g * 1.2:
             return "azul"
         return "no_reconocido"
-
-
 
 
