@@ -1,9 +1,10 @@
 from machine import Pin
 import time
-from config import Pin_IR, Pin_S0, Pin_S1, Pin_S2, Pin_S3, Pin_OUT
+from config import Pin_IR, Pin_S0, Pin_S1, Pin_S2, Pin_S3, Pin_OUT, Pin_boton
 
 class GestorSensores:
     def __init__(self):
+        self.boton_inicio = Pin(Pin_boton, Pin.IN, Pin.PULL_UP)
         # Sensor IR
         self.sensor_ir = Pin(Pin_IR, Pin.IN)
 
@@ -16,6 +17,9 @@ class GestorSensores:
 
         self.sensor_s0.value(0)
         self.sensor_s1.value (1)
+
+    def esta_presioado(self):
+        return self.boton_inicio.value() == 0
 
     def hay_objeto(self):
         return self.sensor_ir.value() == 0

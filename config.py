@@ -1,5 +1,7 @@
 # Configuracion de pines
 
+Pin_boton = 15
+
 # Sensor infrarrojo
 Pin_IR = 4
 
