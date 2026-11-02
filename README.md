@@ -14,6 +14,7 @@ Este repositorio corresponde al **Parcial 2**: firmware local en MicroPython sob
 
 **Entorno de desarrollo:** PyCharm con el plugin MicroPython, sobre una ESP32 física.
 
+> **Nota:** la propuesta inicial contemplaba el sensor TCS34725. Durante el desarrollo se cambió al TCS230, que entrega el color como una frecuencia en lugar de usar I2C. [Escribe aquí el motivo del cambio]
 
 ## Componentes Utilizados
 
@@ -69,4 +70,4 @@ smart-sort/
 2. Al pulsar el botón, la banda arranca y se enciende el LED verde.
 3. Cuando el IR detecta un objeto, la banda se detiene.
 4. Se lee el color con los tres filtros del TCS230.
-5. El servo se mueve a la posición del color detectado. Si no se reconoce, se enciende.
+5. El servo se mueve a la posición del color detectado. Si no se reconoce, se enciende
