@@ -1,5 +1,18 @@
 from machine import Pin, PWM
-from config import Pin_IN1, Pin_IN2, Pin_ENA, Pin_servo
+from config import Pin_IN1, Pin_IN2, Pin_ENA, Pin_servo, led_rojo, led_verde
+
+class IndicadoresLed():
+    def __init__ (self):
+        self.led_verde = Pin(led_verde, Pin.OUT)
+        self.led_rojo = Pin(led_rojo, Pin.OUT)
+
+    def funcionamiento_normal(self):
+        self.led_verde.value(1)
+        self.led_rojo.value(0)
+
+    def sistema_detenido(self):
+        self.led_rojo.value(1)
+        self.led_verde.value(0)
 
 class Motor:
     def __init__(self):
