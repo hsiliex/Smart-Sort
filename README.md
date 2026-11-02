@@ -14,7 +14,7 @@ Este repositorio corresponde al **Parcial 2**: firmware local en MicroPython sob
 
 **Entorno de desarrollo:** PyCharm con el plugin MicroPython, sobre una ESP32 física.
 
-> **Nota:** la propuesta inicial contemplaba el sensor TCS34725. Durante el desarrollo se cambió al TCS230, que entrega el color como una frecuencia en lugar de usar I2C. [Escribe aquí el motivo del cambio]
+> **Nota:** la propuesta inicial contemplaba el sensor TCS34725. Durante el desarrollo se cambió al TCS230, que entrega el color como una frecuencia en lugar de usar I2C.
 
 ## Componentes Utilizados
 
