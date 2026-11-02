@@ -18,7 +18,7 @@ class GestorSensores:
         self.sensor_s0.value(0)
         self.sensor_s1.value (1)
 
-    def esta_presioado(self):
+    def esta_presionado(self):
         return self.boton_inicio.value() == 0
 
     def hay_objeto(self):
