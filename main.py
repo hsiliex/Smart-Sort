@@ -1,5 +1,5 @@
 from sensores import GestorSensores
-from actuadores import Motor, Servo
+from actuadores import Motor, Servo, IndicadoresLed
 import time
 
 
@@ -9,10 +9,11 @@ def main():
     sensor = GestorSensores()
     motor = Motor()
     servo = Servo()
-
+    indicadores = IndicadoresLed()
 
     motor.detener()
     servo.posicion_rojo()
+    indicadores.sistema_detenido()
 
     print("Presiona el botón de inicio para arrancar el sistema...")
 
@@ -23,6 +24,7 @@ def main():
     time.sleep(1)
 
     motor.avanzar()
+    indicadores.funcionamiento_normal()
     print("Banda transportadora en marcha. Esperando objetos...")
 
     try:
@@ -31,9 +33,8 @@ def main():
             if sensor.hay_objeto():
                 print("¡Objeto detectado! Deteniendo banda para lectura...")
                 motor.detener()
+                indicadores.sistema_detenido()
                 time.sleep(0.5)
-
-
                 color_detectado = sensor.leer_color()
                 print(f"Color identificado: {color_detectado}")
 
@@ -50,8 +51,8 @@ def main():
                 else:
                     print("Color no reconocido. Siguiendo de largo...")
 
-                
                 motor.avanzar()
+                indicadores.funcionamiento_normal()
                 print("Reanudando banda...")
 
                 time.sleep(1)  # Antirrebote
@@ -61,6 +62,7 @@ def main():
     except KeyboardInterrupt:
         print("\nSistema detenido por el usuario.")
         motor.detener()
+        indicadores.sistema_detenido()
 
 
 if __name__ == "__main__":
