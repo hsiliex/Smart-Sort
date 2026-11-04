@@ -1,5 +1,10 @@
 # Configuracion de pines
 
+# Leds
+led_verde = 22
+led_rojo = 23
+
+# Botón
 Pin_boton = 15
 
 # Sensor infrarrojo
