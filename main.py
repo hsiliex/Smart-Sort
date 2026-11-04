@@ -50,7 +50,7 @@ def main():
                 else:
                     print("Color no reconocido. Siguiendo de largo...")
 
-                
+
                 motor.avanzar()
                 print("Reanudando banda...")
 
