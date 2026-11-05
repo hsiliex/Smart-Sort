@@ -1,16 +1,19 @@
-# Configuracion de pines
 
-# Leds
+# ==========================================
+# CONFIGURACION DE PINES - SMART SORT
+# ==========================================
+
+# LEDs indicadores
 led_verde = 22
 led_rojo = 23
 
-# Botón
+# Boton de inicio
 Pin_boton = 15
 
-# Sensor infrarrojo
+# Sensor infrarrojo TCRT5000
 Pin_IR = 4
 
-# Sensor de color
+# Sensor de color TCS230
 Pin_S0 = 16
 Pin_S1 = 17
 Pin_S2 = 5
@@ -21,6 +24,5 @@ Pin_OUT = 19
 Pin_IN1 = 25
 Pin_IN2 = 26
 Pin_ENA = 14
-
-# Servo
+# Servomotor
 Pin_servo = 13
