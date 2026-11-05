@@ -15,8 +15,8 @@ class GestorSensores:
         self.sensor_s3 = Pin(Pin_S3, Pin.OUT)
         self.sensor_out = Pin(Pin_OUT, Pin.IN)
 
-        self.sensor_s0.value(0)
-        self.sensor_s1.value (1)
+        self.sensor_s0.value(1)
+        self.sensor_s1.value(0)
 
     def esta_presionado(self):
         return self.boton_inicio.value() == 0
@@ -41,32 +41,44 @@ class GestorSensores:
         azul = self._medir_frecuencia()
 
         return {"R": rojo, "G": verde, "B": azul}
+
+    def _contar_pulso(self, pin):
+        self.contador += 1
+
     def _medir_frecuencia(self):
-        contador=0
-        tiempo_inicio = time.ticks_ms()
-        ultimo_estado = self.sensor_out.value()
+        self.contador = 0
 
-        while time.ticks_diff(time.ticks_ms(), tiempo_inicio)<50:
-            estado_actual = self.sensor_out.value ()
-            if estado_actual != ultimo_estado and estado_actual == 1:
-                contador += 1
-            ultimo_estado = estado_actual
-        return contador
+        self.sensor_out.irq(
+            trigger=Pin.IRQ_RISING,
+            handler=self._contar_pulso
+        )
 
-    def leer_color (self):
+        time.sleep_ms(200)
+
+        self.sensor_out.irq(handler=None)
+
+        return self.contador
+
+    def leer_color(self):
         v = self.leer_color_tcs230()
-        r,g,b= v["R"], v["G"], v ["B"]
-        m = max (r, g, b)
-        if m < 5:
-            return "no_reconocido"
-        if r == m and r > g * 1.2 and r > b *1.2:
-            return "rojo"
-        if g == m and g > r *1.2 and g > b *1.2:
-            return "verde"
-        if b == m and b > r * 1.2 and b>g * 1.2:
-            return "azul"
-        return "no_reconocido"
 
+        r = v["R"]
+        g = v["G"]
+        b = v["B"]
+
+        # Identificar rojo
+        if r > g * 1.2 and r > b * 1.2:
+            return "rojo"
+
+        # Identificar azul
+        if b > g * 1.3 and b > r * 1.3:
+            return "azul"
+
+        # Identificar verde
+        if g > r * 1.2 and b <= g * 1.15:
+            return "verde"
+
+        return "no_reconocido"
 
 
 
