@@ -47,7 +47,7 @@ Este repositorio corresponde al **Parcial 2**: firmware local en MicroPython sob
 | TCS230 OUT | GPIO 19 |
 | L298N IN1 / IN2 / ENA | GPIO 25 / 26 / 14 |
 | Servo | GPIO 13 |
-| LED verde / LED rojo | GPIO 21 / 22 |
+| LED verde / LED rojo | GPIO 22 / 23 |
 
 El motor se alimenta con una fuente externa a través del L298N, nunca directamente desde el ESP32.
 
