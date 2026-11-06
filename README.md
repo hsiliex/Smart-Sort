@@ -59,7 +59,6 @@ smart-sort/
 ├── config.py       # Pines y ángulos del servo
 ├── sensores.py     # Clase GestorSensores (IR, botón, TCS230)
 ├── actuadores.py   # Clases Motor, Servo y Led
-├── imagenes/       # Fotos del montaje y capturas de consola
 ├── .gitignore
 └── README.md
 ```
