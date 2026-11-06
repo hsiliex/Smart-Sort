@@ -48,10 +48,7 @@ class GestorSensores:
     def _medir_frecuencia(self):
         self.contador = 0
 
-        self.sensor_out.irq(
-            trigger=Pin.IRQ_RISING,
-            handler=self._contar_pulso
-        )
+        self.sensor_out.irq( trigger=Pin.IRQ_RISING, handler=self._contar_pulso)
 
         time.sleep_ms(200)
 

@@ -36,13 +36,13 @@ class Motor:
 
 class Servo:
     def __init__ (self):
-        self.servo = PWM(Pin (Pin_servo), freq = 50)
+        self.servo = PWM(Pin (Pin_servo), freq = 70)
 
     def mover(self, posicion):
         self.servo.duty_u16(posicion)
 
 
-        # los valores son para probar no son reales
+#valores son para probar no son reales
     def posicion_rojo(self):
         self.mover(3000)
 
