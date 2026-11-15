@@ -28,7 +28,7 @@ Este repositorio corresponde al **Parcial 2**: firmware local en MicroPython sob
 
 ## Funcionalidades Implementadas (Firmware Local)
 
-* Estructura Modular: Organización limpia del código separada en archivos de configuración de pines (`config.py`), gestión de sensores (`sensores.py`), control de actuadores (`actuadores.py`) y lógica principal (`main.py`).
+* Estructura Modular: Organización limpia del código separada en archivos de configuración de pines (`firmware/config.py`), gestión de sensores (`firmware/sensores.py`), control de actuadores (`firmware/actuadores.py`) y lógica principal (`firmware/main.py`).
 * Control de Banda: Encendido, regulación de velocidad mediante PWM y parada segura del motor DC a través del driver L298N.
 * Adquisición de Datos: Lectura digital de presencia por infrarrojo y medición de frecuencias RGB con el sensor TCS230.
 * Clasificación Local: Algoritmo secuencial para identificar categorías de color y actualizar contadores en tiempo real.

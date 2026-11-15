@@ -1,5 +1,5 @@
-from sensores import GestorSensores
-from actuadores import Motor, Servo, IndicadoresLed
+from firmware.sensores import GestorSensores
+from firmware.actuadores import Motor, Servo, IndicadoresLed
 import time
 
 

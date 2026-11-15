@@ -1,5 +1,5 @@
 from machine import Pin, PWM
-from config import Pin_IN1, Pin_IN2, Pin_ENA, Pin_servo, led_rojo, led_verde
+from firmware.config import Pin_IN1, Pin_IN2, Pin_ENA, Pin_servo, led_rojo, led_verde
 
 class IndicadoresLed():
     def __init__ (self):
