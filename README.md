@@ -53,15 +53,24 @@ El motor se alimenta con una fuente externa a través del L298N, nunca directame
 
 ## Estructura del Repositorio
 
+El repositorio se encuentra organizado de manera modular para diferenciar el firmware local de la interfaz gráfica de supervisión:
+
 ```
-smart-sort/
-├── main.py         # Lógica principal y flujo del sistema
-├── config.py       # Pines y ángulos del servo
-├── sensores.py     # Clase GestorSensores (IR, botón, TCS230)
-├── actuadores.py   # Clases Motor, Servo y Led
+Smart-Sort/
+├── firmware/                  # Código fuente en MicroPython (ESP32)
+│   ├── main.py                # Lógica principal y flujo del sistema
+│   ├── config.py              # Pines y ángulos del servo
+│   ├── sensores.py            # Clase GestorSensores (IR, botón, TCS230)
+│   └── actuadores.py          # Clases Motor, Servo y Led
+│
+├── interfaz/                  # Aplicación de supervisión y control 
+│   ├── paleta_colores.py      # Asignación de colores de la interfaz
+│              
+│              
+│                   
+│
 ├── .gitignore
-└── README.md
-```
+└── README.md                  # Documentación general del proyecto
 
 ## Lógica de Funcionamiento
 
