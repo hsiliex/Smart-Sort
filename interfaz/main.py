@@ -38,7 +38,7 @@ def main(page : ft.Page):
 
     page.add(estructura)
 
-    barra_lateral.contennt = crear_navegacion(cambiar_seccion)
+    barra_lateral.content = crear_navegacion(cambiar_seccion)
 
     dashboard = ft.Column(
         expand = True,
