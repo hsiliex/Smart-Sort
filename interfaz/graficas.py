@@ -1,3 +1,4 @@
+
 import flet as ft
 
 from paleta_colores import *
@@ -35,9 +36,9 @@ def crear_grafica(rojos, verdes, azules):
     total = rojos + verdes + azules
 
     if total == 0:
-       porcentaje_rojo = 0
-       porcentaje_verde = 0
-      porcentaje_azul = 0
+        porcentaje_rojo = 0
+        porcentaje_verde = 0
+        porcentaje_azul = 0
     else:
         porcentaje_rojo = rojos / total
         porcentaje_verde = verdes / total
@@ -52,8 +53,7 @@ def crear_grafica(rojos, verdes, azules):
                 ft.Text(
                     "Clasificación de Objetos",
                     size=18,
-                    weight=ft.FontWeigh
-                t.BOLD,
+                    weight=ft.FontWeight.BOLD,
                     color=COLOR_TEXTO_PRINCIPAL
                 ),
                 crear_barra_color(
