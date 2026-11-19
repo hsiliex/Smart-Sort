@@ -1,13 +1,17 @@
 import flet as ft
+
 from paleta_colores import *
-import random
+
 
 def crear_barra_color(nombre, cantidad, color, porcentaje):
     return ft.Column(
         controls=[
             ft.Row(
                 controls=[
-                    ft.Text(nombre, color=COLOR_TEXTO_PRINCIPAL),
+                    ft.Text(
+                        nombre,
+                        color=COLOR_TEXTO_PRINCIPAL
+                    ),
                     ft.Text(
                         f"{cantidad} objetos ({int(porcentaje * 100)}%)",
                         color=COLOR_TEXTO_SECUNDARIO
@@ -26,18 +30,14 @@ def crear_barra_color(nombre, cantidad, color, porcentaje):
         spacing=8
     )
 
-def crear_grafica(rojos=None, verdes=None, azules=None):
-    if rojos is None or verdes is None or azules is None:
-        rojos = random.randint(15, 60)
-        verdes = random.randint(15, 60)
-        azules = random.randint(15, 60)
 
+def crear_grafica(rojos, verdes, azules):
     total = rojos + verdes + azules
 
     if total == 0:
-        porcentaje_rojo = 0
-        porcentaje_verde = 0
-        porcentaje_azul = 0
+       porcentaje_rojo = 0
+       porcentaje_verde = 0
+      porcentaje_azul = 0
     else:
         porcentaje_rojo = rojos / total
         porcentaje_verde = verdes / total
@@ -50,9 +50,10 @@ def crear_grafica(rojos=None, verdes=None, azules=None):
         content=ft.Column(
             controls=[
                 ft.Text(
-                    "Clasificación de Objetos (Simulado)",
+                    "Clasificación de Objetos",
                     size=18,
-                    weight=ft.FontWeight.BOLD,
+                    weight=ft.FontWeigh
+                t.BOLD,
                     color=COLOR_TEXTO_PRINCIPAL
                 ),
                 crear_barra_color(
