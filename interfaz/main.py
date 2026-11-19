@@ -1,10 +1,14 @@
 import flet as ft
 import random
-from navegacion import crear_navegacion
-from graficas import crear_grafica
-from paleta_colores import *
+from datetime import datetime
 
-def main(page : ft.Page):
+from navegacion import crear_navegacion
+from paleta_colores import *
+from graficas import crear_grafica
+from tablas import crear_tabla, agregar_registro
+
+
+def main(page: ft.Page):
     page.title = "Smart-Sort - Panel de Supervisión"
     page.window.width = 1200
     page.window.height = 720
@@ -12,214 +16,429 @@ def main(page : ft.Page):
     page.window.min_height = 600
     page.bgcolor = COLOR_FONDO_OSCURO
     page.theme_mode = ft.ThemeMode.DARK
+    page.padding = 10
 
+    rojos = 0
+    verdes = 0
+    azules = 0
+    total = 0
     sistema_en_marcha = False
-    conteo = {
-        "rojos": 0,
-        "verdes": 0,
-        "azules": 0,
-    }
+    ultimo_color = "Ninguno"
+    eventos_registrados = []
 
-    def cambiar_seccion(e):
-        indice = e.control.selected_index
-        print(f"Cambiando a la seccion: {indice}")
-
-    def alternar_marcha(e: ft.ControlEvent):
-        nonlocal sistema_en_marcha
-        sistema_en_marcha = not sistema_en_marcha
-
-        if sistema_en_marcha:
-            val_estado_sistema.value = "En Marcha"
-            val_estado_sistema.color = COLOR_VERDE_EN_MARCHA
-
-            boton_marcha.content = "Detener Sistema"
-            boton_marcha.icon = ft.Icons.STOP
-            boton_marcha.bgcolor = COLOR_OBJETO_ROJO
-
-            boton_simular.disabled = False
-        else:
-            val_estado_sistema.value = "Detenido"
-            val_estado_sistema.color = COLOR_NARANJA_ADVERTENCIA
-
-            boton_marcha.content = "Iniciar Sistema"
-            boton_marcha.icon = ft.Icons.PLAY_ARROW
-            boton_marcha.bgcolor = COLOR_VERDE_EN_MARCHA
-
-            boton_simular.disabled = True
-
-        page.update()
-
-    def simular_deteccion(e: ft.ControlEvent):
-        if not sistema_en_marcha:
-            return
-
-        opcion = random.choice(["Rojo", "Verde", "Azul"])
-
-        if opcion == "Rojo":
-            conteo["rojos"] += 1
-            valor_color.value = "Rojo"
-            valor_color.color = COLOR_OBJETO_ROJO
-
-        elif opcion == "Verde":
-            conteo["verdes"] += 1
-            valor_color.value = "Verde"
-            valor_color.color = COLOR_OBJETO_VERDE
-
-        else:
-            conteo["azules"] += 1
-            valor_color.value = "Azul"
-            valor_color.color = COLOR_OBJETO_AZUL
-
-
-        total_actual = conteo["rojos"] + conteo["verdes"] + conteo["azules"]
-        valor_procesados.value = str(total_actual)
-
-        contenedor_grafica.content = crear_grafica(
-            rojos=conteo["rojos"],
-            verdes=conteo["verdes"],
-            azules=conteo["azules"],
-        )
-
-        page.update()
-
-    barra_lateral = ft.Container(
-        width = 230,
-        bgcolor = COLOR_SUPERFICIE_PANEL,
-        padding = 20,
-        border_radius = 15
-    )
-
-    area_principal = ft.Container(
-        expand= True,
-        padding = 30,
-    )
-
-    estructura = ft.Row(
-        expand = True,
-        spacing = 0,
-        controls = [barra_lateral, area_principal]
-    )
-
-    page.add(estructura)
-
-    barra_lateral.content = crear_navegacion(cambiar_seccion)
-
-    dashboard = ft.Column(
-        expand = True,
-        spacing = 20,
-        scroll = ft.ScrollMode.AUTO
-    )
-    area_principal.content=dashboard
-
-    titulo= ft.Text("Dashboard Principal",
-                 size=30,
-                 weight=ft.FontWeight.BOLD,
-                 color=COLOR_TEXTO_PRINCIPAL)
-    subtitulo = ft.Text("Supervision general del proceso - Smart-Sort",
-                     size=13,
-                     color = COLOR_TEXTO_SECUNDARIO)
-
-    encabezado_texto = ft.Column ( spacing = 3,
-                          controls = [titulo, subtitulo],)
-
-    boton_marcha = ft.Button(
-        content = "Iniciar Sistema",
-        icon = ft.Icons.PLAY_ARROW,
-        bgcolor = COLOR_VERDE_EN_MARCHA,
-        color = COLOR_TEXTO_PRINCIPAL,
-        on_click = alternar_marcha
-
-    )
-
-    boton_simular = ft.Button(
-        content = "Simular Objeto",
-        icon = ft.Icons.ADD_CIRCLE_OUTLINE,
-        bgcolor = COLOR_AZUL_PRINCIPAL,
-        color = COLOR_TEXTO_PRINCIPAL,
-        on_click = simular_deteccion
-    )
-
-    botones_accion = ft.Row(
-        spacing = 10,
-        controls = [boton_marcha, boton_simular]
-    )
-
-    encabezado = ft.Row(
-        alignment = ft.MainAxisAlignment.SPACE_BETWEEN,
-        controls = [encabezado_texto, botones_accion]
-    )
-
-    dashboard.controls.append(encabezado)
-
-    def crear_kpi(titulo_kpi,valor_ctrl,icono, color_icono):
-        return ft.Container (
-        expand=1,
-        bgcolor= COLOR_SUPERFICIE_PANEL,
-        padding= 20,
-        border_radius = 16,
-        content = ft.Row (
-        alignment = ft.MainAxisAlignment.SPACE_BETWEEN,
-            controls = [
-                ft.Column (
-                    spacing = 5,
-                    controls = [
-                        ft.Text(titulo_kpi,
-                                color= COLOR_TEXTO_SECUNDARIO,
-                                size=12),
-                          valor_ctrl
-                    ]
-                ),
-                ft.Icon(icono,color = color_icono,size =32)
-            ]
-        )
-    )
+    tabla = crear_tabla()
 
     val_estado_sistema = ft.Text(
         "Detenido",
-        size = 22,
-        weight = ft.FontWeight.BOLD,
-        color = COLOR_NARANJA_ADVERTENCIA
+        size=22,
+        weight=ft.FontWeight.BOLD,
+        color=COLOR_ROJO_PELIGRO
+    )
+
+    estado_control = ft.Text(
+        "Detenido",
+        size=22,
+        weight=ft.FontWeight.BOLD,
+        color=COLOR_ROJO_PELIGRO
     )
 
     valor_color = ft.Text(
         "Ninguno",
-        size = 22,
-        weight = ft.FontWeight.BOLD,
-        color = COLOR_TEXTO_SECUNDARIO
+        size=22,
+        weight=ft.FontWeight.BOLD,
+        color=COLOR_TEXTO_SECUNDARIO
     )
 
     valor_procesados = ft.Text(
         "0",
-        size = 26,
-        weight = ft.FontWeight.BOLD,
-        color = COLOR_TEXTO_PRINCIPAL
+        size=26,
+        weight=ft.FontWeight.BOLD,
+        color=COLOR_TEXTO_PRINCIPAL
     )
 
     val_mqtt = ft.Text(
         "Simulación",
-        size = 22,
-        weight = ft.FontWeight.BOLD,
-        color = COLOR_AZUL_PRINCIPAL
+        size=20,
+        weight=ft.FontWeight.BOLD,
+        color=COLOR_AZUL_PRINCIPAL
     )
+
+    lista_eventos = ft.Column(
+        spacing=8,
+        scroll=ft.ScrollMode.AUTO
+    )
+
+    def registrar_evento(mensaje):
+        hora = datetime.now().strftime("%H:%M:%S")
+        eventos_registrados.insert(0, f"[{hora}] {mensaje}")
+
+        lista_eventos.controls.clear()
+
+        for evento in eventos_registrados:
+            lista_eventos.controls.append(
+                ft.Text(
+                    evento,
+                    color=COLOR_TEXTO_PRINCIPAL,
+                    size=13
+                )
+            )
+
+    def crear_kpi(titulo_kpi, valor_ctrl, icono, color_icono):
+        return ft.Container(
+            expand=1,
+            bgcolor=COLOR_SUPERFICIE_PANEL,
+            padding=20,
+            border_radius=16,
+            content=ft.Row(
+                alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
+                controls=[
+                    ft.Column(
+                        spacing=5,
+                        controls=[
+                            ft.Text(
+                                titulo_kpi,
+                                color=COLOR_TEXTO_SECUNDARIO,
+                                size=12
+                            ),
+                            valor_ctrl
+                        ]
+                    ),
+                    ft.Icon(
+                        icono,
+                        color=color_icono,
+                        size=32
+                    )
+                ]
+            )
+        )
 
     tarjetas_kpi = ft.Row(
-        spacing = 15,
-        controls = [
-            crear_kpi("ESTADO SISTEMA", val_estado_sistema, ft.Icons.POWER_SETTINGS_NEW, COLOR_VERDE_EN_MARCHA),
-            crear_kpi("ULTIMO COLOR", valor_color, ft.Icons.PALETTE, COLOR_OBJETO_ROJO),
-            crear_kpi("TOTAL PROCESADOS", valor_procesados, ft.Icons.FACTORY, COLOR_NARANJA_ADVERTENCIA),
-            crear_kpi("MODO DE DATOS", val_mqtt, ft.Icons.SCIENCE, COLOR_AZUL_PRINCIPAL)
+        spacing=15,
+        controls=[
+            crear_kpi(
+                "ESTADO SISTEMA",
+                val_estado_sistema,
+                ft.Icons.POWER_SETTINGS_NEW,
+                COLOR_VERDE_EN_MARCHA
+            ),
+            crear_kpi(
+                "ÚLTIMO COLOR",
+                valor_color,
+                ft.Icons.PALETTE,
+                COLOR_OBJETO_ROJO
+            ),
+            crear_kpi(
+                "TOTAL PROCESADOS",
+                valor_procesados,
+                ft.Icons.FACTORY,
+                COLOR_NARANJA_ADVERTENCIA
+            ),
+            crear_kpi(
+                "ESTADO MQTT",
+                val_mqtt,
+                ft.Icons.WIFI,
+                COLOR_AZUL_PRINCIPAL
+            )
         ]
     )
-    dashboard.controls.append(tarjetas_kpi)
 
     contenedor_grafica = ft.Container(
-        content = crear_grafica(
-            rojos = conteo["rojos"],
-            verdes = conteo["verdes"],
-            azules = conteo["azules"],
+        content=crear_grafica(rojos, verdes, azules)
+    )
+
+    contenedor_tabla = ft.Container(
+        bgcolor=COLOR_SUPERFICIE_PANEL,
+        padding=15,
+        border_radius=15,
+        content=ft.Column(
+            controls=[
+                ft.Text(
+                    "Últimos registros",
+                    size=18,
+                    weight=ft.FontWeight.BOLD,
+                    color=COLOR_TEXTO_PRINCIPAL
+                ),
+                tabla
+            ],
+            spacing=10
         )
     )
-    dashboard.controls.append(contenedor_grafica)
+
+    def iniciar_sistema(e):
+        nonlocal sistema_en_marcha
+
+        sistema_en_marcha = True
+
+        val_estado_sistema.value = "En Marcha"
+        val_estado_sistema.color = COLOR_VERDE_EN_MARCHA
+
+        estado_control.value = "En Marcha"
+        estado_control.color = COLOR_VERDE_EN_MARCHA
+
+        registrar_evento("Sistema iniciado")
+        page.update()
+
+    def detener_sistema(e):
+        nonlocal sistema_en_marcha
+
+        sistema_en_marcha = False
+
+        val_estado_sistema.value = "Detenido"
+        val_estado_sistema.color = COLOR_ROJO_PELIGRO
+
+        estado_control.value = "Detenido"
+        estado_control.color = COLOR_ROJO_PELIGRO
+
+        registrar_evento("Sistema detenido")
+        page.update()
+
+    def simular_objeto(e):
+        nonlocal rojos, verdes, azules, total, ultimo_color
+
+        if sistema_en_marcha == False:
+            registrar_evento(
+                "No se puede clasificar: sistema detenido"
+            )
+            page.update()
+            return
+
+        color_detectado = random.choice(
+            ["Rojo", "Verde", "Azul"]
+        )
+
+        if color_detectado == "Rojo":
+            rojos += 1
+            valor_color.color = COLOR_OBJETO_ROJO
+
+        elif color_detectado == "Verde":
+            verdes += 1
+            valor_color.color = COLOR_OBJETO_VERDE
+
+        else:
+            azules += 1
+            valor_color.color = COLOR_OBJETO_AZUL
+
+        total += 1
+        ultimo_color = color_detectado
+
+        valor_color.value = ultimo_color
+        valor_procesados.value = str(total)
+
+        contenedor_grafica.content = crear_grafica(
+            rojos,
+            verdes,
+            azules
+        )
+
+        hora = datetime.now().strftime("%H:%M:%S")
+
+        agregar_registro(
+            tabla,
+            total,
+            color_detectado,
+            hora
+        )
+
+        registrar_evento(
+            f"Objeto {total} clasificado: {color_detectado}"
+        )
+
+        page.update()
+
+    boton_iniciar = ft.FilledButton(
+        content=ft.Text("Iniciar sistema"),
+        icon=ft.Icons.PLAY_ARROW,
+        bgcolor=COLOR_VERDE_EN_MARCHA,
+        color=COLOR_TEXTO_PRINCIPAL,
+        on_click=iniciar_sistema
+    )
+
+    boton_simular = ft.FilledButton(
+        "Simular objeto",
+        icon=ft.Icons.ADD,
+        bgcolor=COLOR_AZUL_PRINCIPAL,
+        color=COLOR_TEXTO_PRINCIPAL,
+        on_click=simular_objeto
+    )
+
+    boton_detener = ft.FilledButton(
+        "Detener sistema",
+        icon=ft.Icons.STOP,
+        bgcolor=COLOR_ROJO_PELIGRO,
+        color=COLOR_TEXTO_PRINCIPAL,
+        on_click=detener_sistema
+    )
+
+    dashboard = ft.Column(
+        expand=True,
+        spacing=20,
+        scroll=ft.ScrollMode.AUTO,
+        controls=[
+            ft.Column(
+                spacing=3,
+                controls=[
+                    ft.Text(
+                        "Dashboard Principal",
+                        size=30,
+                        weight=ft.FontWeight.BOLD,
+                        color=COLOR_TEXTO_PRINCIPAL
+                    ),
+                    ft.Text(
+                        "Supervisión general del proceso - Smart-Sort",
+                        size=13,
+                        color=COLOR_TEXTO_SECUNDARIO
+                    )
+                ]
+            ),
+            tarjetas_kpi,
+            ft.Row(
+                controls=[
+                    boton_iniciar,
+                    boton_simular,
+                    boton_detener
+                ],
+                spacing=10,
+                wrap=True
+            ),
+            contenedor_grafica,
+            contenedor_tabla
+        ]
+    )
+
+    pantalla_control = ft.Column(
+        expand=True,
+        spacing=20,
+        scroll=ft.ScrollMode.AUTO,
+        controls=[
+            ft.Text(
+                "Control y Motor",
+                size=30,
+                weight=ft.FontWeight.BOLD,
+                color=COLOR_TEXTO_PRINCIPAL
+            ),
+            ft.Container(
+                bgcolor=COLOR_SUPERFICIE_PANEL,
+                padding=25,
+                border_radius=15,
+                content=ft.Column(
+                    spacing=15,
+                    controls=[
+                        ft.Text(
+                            "Control del sistema",
+                            size=20,
+                            weight=ft.FontWeight.BOLD
+                        ),
+                        ft.Text(
+                            "Utilice los botones para controlar la simulación.",
+                            color=COLOR_TEXTO_SECUNDARIO
+                        ),
+                        estado_control,
+                        ft.Row(
+                            controls=[
+                                ft.FilledButton(
+                                    "Iniciar",
+                                    icon=ft.Icons.PLAY_ARROW,
+                                    bgcolor=COLOR_VERDE_EN_MARCHA,
+                                    on_click=iniciar_sistema
+                                ),
+                                ft.FilledButton(
+                                    "Detener",
+                                    icon=ft.Icons.STOP,
+                                    bgcolor=COLOR_ROJO_PELIGRO,
+                                    on_click=detener_sistema
+                                ),
+                                ft.FilledButton(
+                                    "Simular objeto",
+                                    icon=ft.Icons.ADD,
+                                    bgcolor=COLOR_AZUL_PRINCIPAL,
+                                    on_click=simular_objeto
+                                )
+                            ],
+                            wrap=True
+                        )
+                    ]
+                )
+            ),
+            ft.Container(
+                bgcolor=COLOR_SUPERFICIE_PANEL,
+                padding=25,
+                border_radius=15,
+                content=ft.Column(
+                    controls=[
+                        ft.Text(
+                            "Estado del motor",
+                            size=20,
+                            weight=ft.FontWeight.BOLD
+                        ),
+                        ft.Text(
+                            "Motor simulado - sin conexión física",
+                            color=COLOR_TEXTO_SECUNDARIO
+                        )
+                    ]
+                )
+            )
+        ]
+    )
+
+    pantalla_eventos = ft.Column(
+        expand=True,
+        spacing=15,
+        scroll=ft.ScrollMode.AUTO,
+        controls=[
+            ft.Text(
+                "Eventos y Alertas",
+                size=30,
+                weight=ft.FontWeight.BOLD,
+                color=COLOR_TEXTO_PRINCIPAL
+            ),
+            ft.Container(
+                bgcolor=COLOR_SUPERFICIE_PANEL,
+                padding=20,
+                border_radius=15,
+                content=lista_eventos
+            )
+        ]
+    )
+
+    area_principal = ft.Container(
+        expand=True,
+        padding=30,
+        content=dashboard
+    )
+
+    def cambiar_seccion(e):
+        indice = e.control.selected_index
+
+        if indice == 0:
+            area_principal.content = dashboard
+        elif indice == 1:
+            area_principal.content = pantalla_control
+        elif indice == 2:
+            area_principal.content = pantalla_eventos
+
+        page.update()
+
+    barra_lateral = ft.Container(
+        width=230,
+        bgcolor=COLOR_SUPERFICIE_PANEL,
+        padding=10,
+        border_radius=15,
+        content=crear_navegacion(cambiar_seccion)
+    )
+
+    estructura = ft.Row(
+        expand=True,
+        spacing=0,
+        controls=[
+            barra_lateral,
+            area_principal
+        ]
+    )
+
+    page.add(estructura)
+
+    registrar_evento("Interfaz iniciada en modo simulación")
+    page.update()
+
 
 ft.run(main)
