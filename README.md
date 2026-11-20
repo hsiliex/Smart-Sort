@@ -65,12 +65,32 @@ Smart-Sort/
 │
 ├── interfaz/                  # Aplicación de supervisión y control 
 │   ├── paleta_colores.py      # Asignación de colores de la interfaz
-│              
-│              
-│                   
-│
+│   ├── navegacion.py          # Barra superior y menú lateral de navegación           
+│   ├── graficas.py            # Construcción de grafica de conteo por color          
+│   ├── tablas.py              # Tabla de registros frecuentes y control de filas               
+│   ├── vistas.py              # Vistas secundarias (Control y Motor, Eventos y Alertas)
+│   ├── main.py                # Punto de entrada, dashboard principal y estado de la app
 ├── .gitignore
 └── README.md                  # Documentación general del proyecto
+
+## Interfaz Gráfica (GUI)
+
+La interfaz de usuario de **Smart-Sort** está desarrollada en **Python** utilizando el framework **Flet**, bajo una arquitectura modular que separa la lógica principal de los componentes visuales. En esta entrega, la aplicación opera con **datos simulados localmente** para validar el flujo de monitoreo y control antes de la integración física mediante MQTT.
+
+### Vistas principales
+* **Dashboard Principal:** Muestra el estado actual del sistema (*En marcha* / *Detenido*), contadores acumulados por categoría de color (Rojo, Verde, Azul y Total), un botón alternable de marcha, simulación manual de detección de objetos, una gráfica comparativa en tiempo real y una tabla con los últimos registros procesados.
+* **Control y Motor:** Permite ajustar parámetros operativos simulados como la velocidad de la banda transportadora, el modo de clasificación por color y el reinicio de contadores e historial.
+* **Eventos y Alertas:** Registra cronológicamente las acciones ejecutadas en el sistema, cambios de estado y advertencias operativas.
+
+### Estructura de módulos de la interfaz
+```text
+├── assets/                # Recursos gráficos e ícono de la aplicación
+├── paleta_colores.py      # Constantes y paleta de colores de la interfaz
+├── navegacion.py          # Barra superior y menú lateral de navegación
+├── graficas.py            # Construcción de gráficas de conteo por color
+├── tablas.py              # Tabla de registros recientes y control de filas
+├── vistas.py              # Vistas secundarias (Control y Motor, Eventos y Alertas)
+└── main.py                # Punto de entrada, dashboard principal y estado de la app
 
 ## Lógica de Funcionamiento
 
